@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Full stack CRUD Example with Spring Boot, MySQL and VueJS</title>
+  <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/emp.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Employee</h1>
+    <main id="app">
+      <router-view></router-view>
+    </main>
+  </div>
+
+  <template id="emp">
+    <div>
+      <h2>{{ emp.name }}</h2>
+      <b>Information: </b>
+      <div>{{ emp.information }}</div>
+      <b>Emp Number:</b>
+      <div>{{ emp.empNumber }}</div>
+      <br/>
+      <a>
+        <router-link to="/">Back to emp list</router-link>
+      </a>
+    </div>
+  </template>
+
+  <template id="emp-list">
+    <div>
+      <div class="actions">
+        <a class="btn btn-default">
+          <router-link :to="{path: '/add-emp'}">
+            Add Emp
+          </router-link>
+        </a>
+      </div>
+      <div class="filters row">
+        <div class="form-group col-sm-3">
+          <input placeholder="Search" v-model="searchKey" class="form-control" id="search-element" requred/>
+        </div>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Emp Number</th>
+          <th>Name</th>
+          <th>Information</th>
+          <th class="col-sm-2">Run</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="emp in filteredEmps">
+          <!-- tr v-for="product in products" -->
+          <!-- tr v-for="product in products | filterBy searchKey in 'name'" -->
+          <td>
+            {{ emp.empNumber }}
+            <!--span class="glyphicon glyphicon-euro" aria-hidden="true"></span-->
+          </td>
+          <td>
+            <a>
+              <router-link :to="{name: 'emp', params: {emp_id: emp.id}}">{{ emp.name }}</router-link>
+            </a>
+          </td>
+          <td>{{ emp.information }}</td>
+
+          <td>
+            <a class="btn btn-warning btn-xs">
+              <router-link :to="{name: 'emp-edit', params: {emp_id: emp.id}}">Edit</router-link>
+            </a>
+            <a class="btn btn-warning btn-xs">
+              <router-link :to="{name: 'emp-delete', params: {emp_id: emp.id}}">Delete</router-link>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </template>
+
+
+  <template id="add-emp">
+    <div>
+      <h2>Add new emp</h2>
+      <form @submit="createEmp">
+        <div class="form-group">
+          <label for="add-empNumber">Emp Number</label>
+          <input type="number" class="form-control" id="add-empNumber" v-model="emp.empNumber"/>
+        </div>
+        <div class="form-group">
+          <label for="add-name">Name</label>
+          <input class="form-control" id="add-name" v-model="emp.name" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-information">Information</label>
+          <textarea class="form-control" id="add-information" rows="10" v-model="emp.information"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+
+  <template id="emp-edit">
+    <div>
+      <h2>Edit emp</h2>
+      <form @submit="updateEmp">
+        <div class="form-group">
+          <label for="edit-empNumber">Emp Number</label>
+          <input type="number" class="form-control" id="edit-empNumber" v-model="emp.empNumber"/>
+        </div>
+        <div class="form-group">
+          <label for="edit-name">Name</label>
+          <input class="form-control" id="edit-name" v-model="emp.name" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-information">Information</label>
+          <textarea class="form-control" id="edit-information" rows="3" v-model="emp.information"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+
+  <template id="emp-delete">
+    <div>
+      <h2>Delete emp {{ emp.name }}</h2>
+      <form @submit="deleteEmp">
+        <p>The action cannot be undone.</p>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+
+  <script src="https://unpkg.com/vue@2.5.22/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+  <script src="/emp.js"></script>
+
+</body>
+</html>
